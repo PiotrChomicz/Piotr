@@ -1,0 +1,130 @@
+export type UserGoal =
+  | "wyrazniej"
+  | "pewniej"
+  | "negocjacje"
+  | "kamera"
+  | "modulacja"
+  | "storytelling"
+  | "charyzma"
+  | "kreatywnosc";
+
+export type User = {
+  id: string;
+  name: string;
+  goal: UserGoal;
+  createdAt: string;
+};
+
+export type TrainingPath =
+  | "dykcja"
+  | "modulacja"
+  | "negocjacje"
+  | "creator"
+  | "storytelling"
+  | "pewnosc";
+
+export type ExerciseDifficulty = "latwy" | "sredni" | "trudny";
+
+export type Exercise = {
+  id: string;
+  path: TrainingPath;
+  title: string;
+  instruction: string;
+  textToRead?: string;
+  durationSec: number;
+  difficulty: ExerciseDifficulty;
+};
+
+export type Recording = {
+  id: string;
+  exerciseId?: string;
+  durationSec: number;
+  createdAt: string;
+  blobUrl?: string;
+};
+
+export type Transcription = {
+  recordingId: string;
+  text: string;
+  language: "pl";
+  wordsPerMinute?: number;
+};
+
+export type ScoreArea =
+  | "dykcja"
+  | "tempo"
+  | "pauzy"
+  | "modulacja"
+  | "pewnosc"
+  | "energia"
+  | "struktura"
+  | "perswazja"
+  | "naturalnosc";
+
+export type VoiceScore = {
+  overall: number;
+  areas: Record<ScoreArea, number>;
+};
+
+export type AIFeedback = {
+  recordingId: string;
+  score: VoiceScore;
+  strengths: string[];
+  improvements: string[];
+  betterVersion?: string;
+  tomorrowExercise: string;
+};
+
+export type NegotiationScenario = {
+  id: string;
+  title: string;
+  situation: string;
+  userGoal: string;
+  otherPartyLine: string;
+};
+
+export type CreatorScenario = {
+  id: string;
+  title: string;
+  description: string;
+  timeLimitSec: number;
+  example: string;
+};
+
+export type DailyMission = {
+  id: string;
+  title: string;
+  description: string;
+  durationSec: number;
+  reward: number;
+  path: TrainingPath;
+};
+
+export type ProgressLog = {
+  date: string;
+  score: number;
+  recordingsCount: number;
+  streakDays: number;
+};
+
+export type RephraseStyle = "naturalny" | "biznesowy" | "pewny-siebie" | "ekspercki";
+
+export type RephraseExample = {
+  input: string;
+  outputs: Record<RephraseStyle, string>;
+};
+
+export type JokeType = "one-liner" | "obserwacja" | "hook" | "autoironia";
+
+export type Joke = {
+  id: string;
+  type: JokeType;
+  text: string;
+  category: string;
+};
+
+export type WordOfDay = {
+  word: string;
+  definition: string;
+  examples: string[];
+};
