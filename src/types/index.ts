@@ -1,6 +1,9 @@
 // Warstwa dostepu / subskrypcji (role, plany, limity) — przygotowanie pod baze.
 export * from "./access";
 
+// Peer feedback + profil postepu (oceny wyboru, metryki, snapshoty) — pod baze.
+export * from "./peer-feedback";
+
 export type UserGoal =
   | "wyrazniej"
   | "pewniej"

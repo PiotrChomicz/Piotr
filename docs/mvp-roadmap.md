@@ -100,6 +100,24 @@ przygotowaną warstwę z `src/types/access.ts`, `src/lib/entitlements.ts` i
 - [ ] Analiza mowy ciała (postawa, kontakt wzrokowy, gesty).
 - [ ] Zaawansowany roleplay z avatarem.
 
+## Przyszłe pod-etapy — profil postępu i peer feedback (additywne)
+
+Nie zmieniają kolejności najbliższych etapów (2D → 2E → 2F → Etap 3). Opisane
+architektonicznie w `docs/database-plan.md` (sekcja „Future module: Peer
+Feedback & Progress Profile") i w typach `src/types/peer-feedback.ts`.
+
+- [ ] **Etap 3B — User Profile + historia treningów**: profil rozwoju, liczba
+  treningów, streak, historia nagrań, ostatnie feedbacki, odznaki.
+- [ ] **Etap 3C — Progress Metrics + Voice Influence Score snapshots**:
+  historyczne metryki per obszar, snapshoty VIS z timestampami, wykresy trendu,
+  porównanie pierwszego i ostatniego nagrania.
+- [ ] **Etap 4B — Peer Feedback jako bezpieczne oceny wyboru**: oceny nagrania
+  (nie osoby) na wyborach zamkniętych, domyślnie prywatne.
+- [ ] **Etap 4C — Privacy + moderation**: privacy settings, zgłoszenia nadużyć,
+  kolejka moderacji, usuwanie nagrań.
+- [ ] **Etap 5 — Team / Business panel**: zespoły, panel lidera, raporty, oceny
+  w ramach zespołu (spójne z istniejącym „Etap 6 — Business panel").
+
 ## Mierniki sukcesu MVP
 
 - Czas do pierwszego nagrania < 60 sekund od wejścia na stronę.

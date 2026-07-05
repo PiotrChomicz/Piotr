@@ -126,3 +126,136 @@ scenariusze firmowe, zarządzanie użytkownikami.
 4. `access_level` na treściach → gating treści premium.
 5. `/pricing`, `/account`, `/admin`.
 6. RLS na wszystkich tabelach użytkownika.
+
+---
+
+# Future module: Peer Feedback & Progress Profile
+
+Status: **PLAN / TODO.** Wyłącznie architektura, typy i plan bazy.
+Typy: `src/types/peer-feedback.ts` (wszystkie oceny jako String Literal Types).
+
+**Świadomie NIE budujemy teraz:** social feedu, komentarzy, publicznych profili,
+działającego peer review UI, auth, Stripe, Supabase connect, uploadu nagrań.
+
+## A. Co użytkownik widzi na swoim profilu (docelowo)
+
+- Voice Influence Score (aktualny),
+- liczba treningów,
+- streak,
+- postęp per obszar (dykcja, pewność, słownictwo, storytelling, humor/timing,
+  negocjacje),
+- historia nagrań,
+- ostatnie feedbacki (AI + ewentualnie peer),
+- odznaki (`badges` / `user_badges`),
+- plan subskrypcji.
+
+## B. Jak działa historia postępu
+
+- zapis sesji treningowych (`training_sessions`),
+- zapis nagrań (`recordings`, audio-only),
+- zapis feedbacków (`feedback_reports`),
+- porównanie **pierwszego i ostatniego** nagrania,
+- metryki tygodniowe / miesięczne (agregacja z serii punktów),
+- **historia Voice Influence Score jako snapshoty z timestampami**
+  (`voice_influence_snapshots`).
+
+## C. WAŻNE — `user_progress_metrics` i `voice_influence_snapshots` są HISTORYCZNE
+
+Tabela `user_progress_metrics` **nie może** przechowywać jednej nadpisywanej
+wartości. Musi wspierać historyczne snapshoty metryk z timestampami. W
+szczególności Voice Influence Score zapisujemy jako **serię punktów w czasie**:
+
+```
+user_progress_metrics / voice_influence_snapshots:
+- user_id
+- metric_type            (ProgressMetric, np. voice_influence, diction, ...)
+- score_value
+- score_max
+- source                 (ProgressSource: ai_feedback | peer_review | self | system)
+- related_training_session_id   (wskazane powiązanie)
+- related_recording_id          (dla snapshotów VIS)
+- created_at             (timestamp — OBOWIĄZKOWY)
+```
+
+Zasady:
+- dane są **historyczne**,
+- **nie nadpisujemy** wyłącznie ostatniego wyniku,
+- każdy pomiar ma **timestamp**,
+- powiązanie z `training_session` / `recording` jest wskazane,
+- struktura ma umożliwiać **wykresy progresu w czasie**, trendy tygodniowe/
+  miesięczne oraz porównanie pierwszego i ostatniego nagrania (Etap 3C/4).
+
+Odpowiadające typy: `UserProgressMetric`, `VoiceInfluenceSnapshot`,
+`ProgressMetric`, `ProgressSource`.
+
+## D. Jak działa przyszły peer feedback
+
+- użytkownik **sam decyduje**, czy udostępnia nagranie do oceny,
+- **domyślnie nagrania są prywatne** (`PrivacySettings.defaultRecordingVisibility = "private"`),
+- **oceniamy nagranie, nie osobę**,
+- pierwsza wersja używa **wyborów zamkniętych** (ratingi + best/improvement),
+- komentarze tekstowe **dopiero później, po moderacji** (`PeerReview.note` opcjonalny).
+
+Struktura recenzji (typy): `PeerReview`, `PeerReviewRating`, `PeerReviewChoice`,
+`PeerReviewScore`. Recenzja zawiera: oceny wg kryteriów, jedną rzecz najlepszą
+(`BestElement`), jedną do poprawy (`ImprovementArea`), opcjonalną radę (później).
+
+## E. Jak chronimy użytkownika
+
+- brak toksycznych rankingów (`PrivacySettings.showInLeaderboards = false` domyślnie),
+- brak publicznego zawstydzania,
+- opcja zgłoszenia nadużycia (`abuse_reports` / `AbuseReport`),
+- moderacja (`moderation_queue` / `review_queue`, `ModerationStatus`),
+- możliwość usunięcia nagrania,
+- jasne `privacy_settings` / `PrivacySettings`.
+
+Profil ma **motywować do rozwoju, nie zawstydzać**. Publiczne porównywanie
+użytkowników **nie jest** częścią MVP.
+
+## F. Powiązanie z planami
+
+- **Free:** podstawowy profil, krótka historia, ograniczona liczba nagrań/ocen.
+- **Plus:** dłuższa historia, więcej nagrań, podstawowy peer feedback.
+- **Pro:** zaawansowane metryki, porównania, pełny AI feedback.
+- **Business:** zespoły, panel lidera, raporty, oceny w ramach zespołu.
+
+## G. Przyszłe tabele (peer feedback + progres)
+
+> Historyczne, snapshotowe; nazewnictwo snake_case.
+
+| Tabela | Rola |
+|---|---|
+| `user_progress_metrics` | **historyczne** snapshoty metryk (patrz sekcja C) |
+| `voice_influence_snapshots` | **historyczne** punkty Voice Influence Score w czasie |
+| `peer_reviews` | recenzje nagrań (nie osób) |
+| `peer_review_scores` | pochodne wyniki liczbowe recenzji (agregacja/wykresy) |
+| `peer_review_ratings` | zamknięte oceny kryteriów (clarity, pace, ...) |
+| `peer_review_choices` | wybory: best element + improvement area |
+| `review_queue` | kolejka nagrań zgłoszonych do oceny |
+| `privacy_settings` | ustawienia prywatności użytkownika |
+| `abuse_reports` | zgłoszenia nadużyć |
+| `moderation_queue` | kolejka moderacji treści/recenzji |
+| `badges` | katalog odznak |
+| `user_badges` | odznaki przyznane użytkownikom |
+| `teams` | zespoły (plan Business) |
+| `team_members` | członkostwo w zespole |
+| `team_reviews` | oceny w ramach zespołu |
+
+**Adnotacja dla `user_progress_metrics` i `voice_influence_snapshots`:** dane są
+historyczne, nie nadpisujemy wyłącznie ostatniego wyniku, każdy pomiar ma
+timestamp, powiązanie z `training_session`/`recording` jest wskazane, a struktura
+ma umożliwiać wykresy progresu w czasie.
+
+## H. Zasady bezpieczeństwa peer feedback
+
+1. Oceniamy nagranie, nie człowieka.
+2. Feedback ma być konstruktywny.
+3. Preferujemy wybory zamknięte zamiast otwartych komentarzy.
+4. Domyślnie nagrania są prywatne.
+5. Użytkownik sam wybiera, czy chce peer review.
+6. Przyszła opcja zgłoszenia nadużycia.
+7. Przyszła kolejka moderacji.
+8. Bez toksycznych rankingów i publicznego zawstydzania.
+9. Tryb zespołowy dopiero później (plan Business).
+10. Publiczne porównywanie użytkowników nie jest częścią MVP.
+11. Profil ma motywować do rozwoju, nie zawstydzać.
