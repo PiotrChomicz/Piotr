@@ -107,11 +107,23 @@ export type ProgressLog = {
   streakDays: number;
 };
 
-export type RephraseStyle = "naturalny" | "biznesowy" | "pewny-siebie" | "ekspercki";
+export type RephraseStyle =
+  | "naturalny"
+  | "biznesowy"
+  | "pewny-siebie"
+  | "elegancki"
+  | "viralowy"
+  | "krotki";
+
+export type RephraseVersion = {
+  text: string;
+  why: string;
+};
 
 export type RephraseExample = {
   input: string;
-  outputs: Record<RephraseStyle, string>;
+  weakness: string;
+  outputs: Record<RephraseStyle, RephraseVersion>;
 };
 
 export type JokeType = "one-liner" | "obserwacja" | "hook" | "autoironia";
@@ -127,4 +139,19 @@ export type WordOfDay = {
   word: string;
   definition: string;
   examples: string[];
+};
+
+export type TrendStatus = "swieze" | "rosnace" | "gorace";
+
+export type TrendWord = {
+  word: string;
+  note: string;
+  status: TrendStatus;
+};
+
+export type WordChallenge = {
+  word: string;
+  task: string;
+  durationSec: number;
+  tip: string;
 };
