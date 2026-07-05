@@ -99,7 +99,7 @@ export const modules: AppModule[] = [
     icon: "🎤",
     href: "/jokes",
     priority: "premium",
-    available: false,
+    available: true,
   },
   {
     slug: "standup",
@@ -108,7 +108,7 @@ export const modules: AppModule[] = [
     icon: "🎭",
     href: "/jokes?mode=standup",
     priority: "premium",
-    available: false,
+    available: true,
   },
   {
     slug: "negocjacje",

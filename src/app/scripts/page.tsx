@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { Badge } from "@/components/Badge";
+import { RandomMachine } from "@/components/RandomMachine";
 import { mockScenes } from "@/data/mockScenarios";
 import type { ExerciseDifficulty, Scene, SceneCategory } from "@/types";
 
@@ -42,35 +44,10 @@ export default function ScriptsPage() {
     mockScenes.find((s) => s.id === FEATURED_ID) ?? mockScenes[0];
 
   const [activeScene, setActiveScene] = useState<Scene>(featured);
-  const [machineScene, setMachineScene] = useState<Scene>(featured);
-  const [isShuffling, setIsShuffling] = useState(false);
   const [category, setCategory] = useState<SceneCategory | "wszystkie">(
     "wszystkie"
   );
   const [firstOnly, setFirstOnly] = useState(false);
-  const shufflingRef = useRef(false);
-
-  const pickRandom = () =>
-    mockScenes[Math.floor(Math.random() * mockScenes.length)];
-
-  const handleShuffle = () => {
-    if (shufflingRef.current) return;
-    shufflingRef.current = true;
-    setIsShuffling(true);
-    let ticks = 0;
-    const iv = setInterval(() => {
-      setMachineScene(pickRandom());
-      ticks += 1;
-      if (ticks > 9) {
-        clearInterval(iv);
-        const final = pickRandom();
-        setMachineScene(final);
-        setActiveScene(final);
-        setIsShuffling(false);
-        shufflingRef.current = false;
-      }
-    }, 75);
-  };
 
   const filtered = mockScenes.filter((s) => {
     if (firstOnly && !s.firstContact) return false;
@@ -94,9 +71,9 @@ export default function ScriptsPage() {
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="flex flex-col rounded-3xl border border-accent/40 bg-hero-gradient p-6 sm:p-7">
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-accent/25 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-accent-soft">
+            <Badge className="bg-accent/25 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-accent-soft">
               Scenka Dnia
-            </span>
+            </Badge>
             <span className="text-xs text-muted">
               {categoryIcon(featured.category)} {categoryLabel(featured.category)}
             </span>
@@ -106,14 +83,14 @@ export default function ScriptsPage() {
           </h2>
           <p className="mt-2 text-sm text-muted">{featured.situation}</p>
           <div className="mt-4 flex flex-wrap gap-2 text-[11px]">
-            <span className="rounded-full border border-border px-2.5 py-0.5 text-muted">
+            <Badge className="border border-border px-2.5 py-0.5 text-muted">
               ⏱ {featured.durationSec}s
-            </span>
-            <span
-              className={`rounded-full px-2.5 py-0.5 ${difficultyMeta[featured.difficulty].className}`}
+            </Badge>
+            <Badge
+              className={`px-2.5 py-0.5 ${difficultyMeta[featured.difficulty].className}`}
             >
               {difficultyMeta[featured.difficulty].label}
-            </span>
+            </Badge>
           </div>
           <button
             onClick={() => setActiveScene(featured)}
@@ -123,39 +100,14 @@ export default function ScriptsPage() {
           </button>
         </div>
 
-        <div className="flex flex-col rounded-3xl border border-border/60 bg-surface p-6 sm:p-7">
-          <div className="flex items-center justify-between">
-            <span className="rounded-full border border-border px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-muted">
-              Maszyna Losująca
-            </span>
-            <span className="text-xs text-muted">{mockScenes.length} scenek</span>
-          </div>
-
-          <div className="mt-4 flex flex-1 items-center justify-center">
-            <div className="relative w-full">
-              <div className="absolute inset-0 -rotate-6 rounded-2xl border border-border/50 bg-surfaceElevated/60" />
-              <div className="absolute inset-0 rotate-3 rounded-2xl border border-border/50 bg-surfaceElevated/80" />
-              <div className="relative rounded-2xl border border-accent/40 bg-background/70 p-5 text-center">
-                <p className="text-[10px] uppercase tracking-wider text-muted">
-                  {isShuffling ? "Tasuję…" : "Gotowe do losowania"}
-                </p>
-                <p
-                  className={`mt-2 min-h-[2.5rem] text-base font-medium text-white ${isShuffling ? "animate-shuffle" : ""}`}
-                >
-                  {machineScene.title}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={handleShuffle}
-            disabled={isShuffling}
-            className="mt-6 inline-flex items-center justify-center rounded-xl bg-accent-gradient px-5 py-3 text-sm font-medium text-white shadow-glow transition hover:opacity-90 disabled:opacity-60"
-          >
-            🎲 Wylosuj wyzwanie
-          </button>
-        </div>
+        <RandomMachine
+          items={mockScenes}
+          getLabel={(s) => s.title}
+          onReveal={setActiveScene}
+          initialItem={featured}
+          countText={`${mockScenes.length} scenek`}
+          buttonLabel="🎲 Wylosuj wyzwanie"
+        />
       </section>
 
       <section
@@ -163,21 +115,21 @@ export default function ScriptsPage() {
         className="animate-scene-reveal rounded-3xl border border-border/60 bg-surface p-6 sm:p-8"
       >
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-[11px] text-accent-soft">
+          <Badge className="bg-accent/15 px-2.5 py-0.5 text-[11px] text-accent-soft">
             {categoryIcon(activeScene.category)} {categoryLabel(activeScene.category)}
-          </span>
-          <span className="rounded-full border border-border px-2.5 py-0.5 text-[11px] text-muted">
+          </Badge>
+          <Badge className="border border-border px-2.5 py-0.5 text-[11px] text-muted">
             ⏱ {activeScene.durationSec}s
-          </span>
-          <span
-            className={`rounded-full px-2.5 py-0.5 text-[11px] ${difficultyMeta[activeScene.difficulty].className}`}
+          </Badge>
+          <Badge
+            className={`px-2.5 py-0.5 text-[11px] ${difficultyMeta[activeScene.difficulty].className}`}
           >
             {difficultyMeta[activeScene.difficulty].label}
-          </span>
+          </Badge>
           {activeScene.firstContact && (
-            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] text-emerald-200">
+            <Badge className="bg-emerald-500/15 px-2.5 py-0.5 text-[11px] text-emerald-200">
               🔰 Pierwszy kontakt
-            </span>
+            </Badge>
           )}
         </div>
 
@@ -316,11 +268,11 @@ export default function ScriptsPage() {
                   <span className="text-xs text-muted">
                     {categoryIcon(s.category)} {categoryLabel(s.category)}
                   </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] ${difficultyMeta[s.difficulty].className}`}
+                  <Badge
+                    className={`px-2 py-0.5 text-[10px] ${difficultyMeta[s.difficulty].className}`}
                   >
                     {difficultyMeta[s.difficulty].label}
-                  </span>
+                  </Badge>
                 </div>
                 <h3 className="mt-3 text-base font-medium text-white">
                   {s.title}

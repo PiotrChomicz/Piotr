@@ -1,3 +1,6 @@
+// Warstwa dostepu / subskrypcji (role, plany, limity) — przygotowanie pod baze.
+export * from "./access";
+
 export type UserGoal =
   | "wyrazniej"
   | "pewniej"
@@ -156,6 +159,11 @@ export type Joke = {
   type: JokeType;
   text: string;
   category: string;
+  // Anatomia zartu (opcjonalna) — pod tryb Stand-up light i sekcje techniki.
+  setup?: string;
+  punch?: string;
+  technique?: string;
+  why?: string;
 };
 
 export type WordOfDay = {
