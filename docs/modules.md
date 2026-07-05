@@ -2,6 +2,24 @@
 
 Konfiguracja techniczna w `src/lib/modules.ts`.
 
+## Status wdrożenia (po Etapach 2A/2B/2C)
+
+| Obszar / route | Status |
+|---|---|
+| `/vocabulary` — Powiedz to lepiej, Słowo dnia, TrendWords | ✅ dostępne (mock data) |
+| `/scripts` — Camera Breaker + scenki (7 kategorii) | ✅ dostępne (mock data) |
+| `/jokes` — Humor Coach + Stand-up light | ✅ dostępne (mock data) |
+| `/recording` — nagrywanie | ✅ dostępne, **audio-only** (MediaRecorder, bez wideo) |
+| `/feedback` — analiza nagrania | ✅ dostępne jako **mock** (9 obszarów) |
+| `/dashboard` — panel użytkownika | ✅ dostępne (Daily Loop w 2D) |
+| `/admin` — panel admina | ⏳ później (przygotowany architektonicznie) |
+| `/account` — konto użytkownika | ⏳ później |
+| `/pricing` — plany subskrypcji | ⏳ później |
+
+Panele `/admin`, `/account`, `/pricing` oraz gating Free/Plus/Pro/Business są
+opisane w `docs/database-plan.md` — **przygotowane, niewdrożone** (bez auth,
+Stripe, Supabase connect, sekretów).
+
 ## Priorytety
 
 - **core** — w MVP od początku.
@@ -39,12 +57,15 @@ Główny moduł produktu. Użytkownik nagrywa 30–60 sekund w przeglądarce
 
 ### 4. Powiedz to lepiej (core)
 
-Użytkownik wpisuje swoje zdanie, dostaje 4 alternatywy w stylach:
+Użytkownik wybiera zdanie, dostaje 6 alternatyw w stylach (każda z „dlaczego
+działa"):
 
 - naturalny
 - biznesowy
 - pewny siebie
-- ekspercki
+- elegancki
+- viralowy
+- krótki i mocny
 
 Mock data: `src/data/mockRephrase.ts`.
 

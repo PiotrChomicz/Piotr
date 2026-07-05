@@ -16,15 +16,32 @@ zobacz Voice Influence Score → dostań kolejną misję → zobacz progres`
 Etap obecny: **MVP / klikalny prototyp** — bez bazy, bez płatności, bez
 prawdziwego API AI. Wszystkie odpowiedzi AI generowane z mock data.
 
+**Status modułów (po Etapach 2A/2B/2C):**
+
+- ✅ Etap 2A — `/vocabulary` (Powiedz to lepiej: 6 stylów, Słowo dnia,
+  TrendWords Radar, ćwiczenie aktywnego użycia).
+- ✅ Etap 2B — `/scripts` (Camera Breaker + generator scenek, 7 kategorii,
+  Maszyna Losująca).
+- ✅ Etap 2C — `/jokes` (Humor Coach, Stand-up light, anatomia żartu).
+- ✅ Refactor: współdzielone `RandomMachine` i `Badge` w `src/components/`.
+- ✅ Przygotowanie architektoniczne pod bazę/subskrypcje (typy + plan + docs,
+  **bez** wdrożenia) — patrz `docs/database-plan.md`.
+
 ## Stack
 
-- **Next.js 15** (App Router)
+- **Next.js 15** (App Router) — aplikacja **webowa**, deploy na Vercel
 - **TypeScript** (strict)
 - **Tailwind CSS 3**
 - **React 19**
 - **MediaRecorder API** dla nagrywania głosu w przeglądarce
 - Mobile-first, responsywny design
 - Język interfejsu: **polski**
+
+**To jest web app w Next.js — NIE Expo / React Native / expo-router /
+NativeWind / Capacitor / Metro.** Natywne aplikacje Android/iOS to przyszłość
+(po walidacji), nie ten etap. MVP jest **audio-only** — bez kamery wideo i bez
+bibliotek kamery. Komendy walidacyjne: `npm run lint`, `npm run build`
+(typy: `npx tsc --noEmit`).
 
 ## Tone of voice — bardzo ważne
 
@@ -136,16 +153,27 @@ Skala 0–100 dla każdego obszaru i jeden overall.
 - Bez wysyłania nagrań na serwer — wszystko zostaje w przeglądarce.
 - Bez tworzenia plików `.md` bez wyraźnej prośby.
 
+Uwaga: Supabase, Auth, Stripe oraz panele `/admin` i `/account` są
+**przygotowane architektonicznie** (typy w `src/types/access.ts`, konfiguracja
+planów w `src/lib/entitlements.ts`, plan w `docs/database-plan.md`), ale
+**niewdrożone** — bez connectu, sekretów, RLS i realnego gatingu.
+
 ## Praca etapami
 
 1. **Etap 1 — fundament**: setup, dokumentacja, landing, dashboard, recording,
    feedback. ✅
-2. **Etap 2 — moduły MVP**: `/scripts`, `/vocabulary` (Powiedz to lepiej + słowo
-   dnia), `/jokes` — wszystko z mock data.
+2. **Etap 2 — moduły MVP** (mock data): ✅
+   - 2A `/vocabulary` (6 stylów + Słowo dnia + TrendWords). ✅
+   - 2B `/scripts` (Camera Breaker + scenki, 7 kategorii). ✅
+   - 2C `/jokes` (Humor Coach + Stand-up light) + refactor `RandomMachine`/`Badge`
+     + przygotowanie pod Supabase/subskrypcje. ✅
+   - 2D `/dashboard` Daily Loop — **następny**.
+   - 2E `/recording` odczytuje kontekst `scenario`/`joke` z URL.
+   - 2F Codex Review.
 3. **Etap 3 — UX polish**: animacje, stany pustki, mobilne polerowanie,
    on-boarding (wybór celu).
-4. **Etap 4 — integracje** (później): baza, auth, prawdziwe AI (Whisper +
-   Anthropic/OpenAI), płatności.
+4. **Etap 4 — integracje** (później): Supabase Auth, baza, historia treningów,
+   limity Free/Plus/Pro, prawdziwe AI (Whisper + Anthropic/OpenAI), Stripe.
 
 ## Uruchomienie lokalne
 

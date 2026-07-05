@@ -28,15 +28,19 @@ Format odpowiedzi: JSON zgodny z typem AIFeedback.
 ## 2. Powiedz to lepiej
 
 ```
-Otrzymujesz krótkie zdanie po polsku. Wygeneruj 4 alternatywy w stylach:
+Otrzymujesz krótkie zdanie po polsku. Wygeneruj 6 alternatyw w stylach:
 
 - naturalny (codzienna rozmowa, ciepło)
 - biznesowy (klarownie, profesjonalnie, bez slangów)
 - pewny-siebie (mocna pozycja, bez agresji)
-- ekspercki (precyzyjnie, z głębią, ale bez bełkotu)
+- elegancki (kultura słowa, spokój, klasa)
+- viralowy (hook, kontrast, zapada w pamięć)
+- krotki (jedno zdanie, punch — krótka i mocna wersja)
 
-Zachowaj sens wypowiedzi, nie dodawaj nowych faktów.
-Format: JSON z 4 polami w/g typu RephraseExample.outputs.
+Przy każdej wersji dodaj krótkie „dlaczego działa" (pole why).
+Zachowaj sens wypowiedzi, nie dodawaj nowych faktów. Naturalność ponad
+profesorski bełkot.
+Format: JSON w/g typu RephraseExample.outputs (Record<RephraseStyle, {text, why}>).
 ```
 
 ## 3. Negocjacje
@@ -134,6 +138,17 @@ Wymagania:
 - po polsku, naturalna składnia.
 
 Zwróć: tekst żartu + krótką notatkę o mechanice (kontrast / przesada / callback / odwrócenie).
+
+Humor ma być **edukacyjny**, nie tylko rozrywkowy. Rozkładaj żart na części,
+żeby użytkownik rozumiał, *dlaczego* to działa:
+- setup (budowa oczekiwania),
+- pauza (cisza przed puentą robi połowę roboty),
+- punchline / puenta (zwrot, który łamie oczekiwanie),
+- timing (gdzie zwolnić, gdzie przyspieszyć),
+- mechanizm humoru (kontrast, wyolbrzymienie, autoironia, antyklimaks, callback).
+
+Odpowiada to polom typu Joke: `setup`, `punch`, `technique`, `why`
+(tryb Stand-up light: setup → pauza → puenta).
 ```
 
 ## 9. Słowo dnia
