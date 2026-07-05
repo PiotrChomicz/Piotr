@@ -18,3 +18,34 @@ body {
   background-color: rgba(168, 85, 247, 0.35);
   color: #ffffff;
 }
+
+@keyframes scene-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-scene-reveal {
+  animation: scene-reveal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes shuffle-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.35;
+    transform: translateY(-4px);
+  }
+}
+
+.animate-shuffle {
+  animation: shuffle-flicker 0.14s linear infinite;
+}

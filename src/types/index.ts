@@ -91,6 +91,29 @@ export type CreatorScenario = {
   example: string;
 };
 
+export type SceneCategory =
+  | "przelam-kamere"
+  | "tiktok"
+  | "negocjacje"
+  | "storytelling"
+  | "aktorstwo"
+  | "absurd"
+  | "wystapienie";
+
+export type Scene = {
+  id: string;
+  category: SceneCategory;
+  title: string;
+  situation: string;
+  starter: string;
+  goal: string;
+  durationSec: number;
+  difficulty: ExerciseDifficulty;
+  instruction: string;
+  tip: string;
+  firstContact?: boolean;
+};
+
 export type DailyMission = {
   id: string;
   title: string;

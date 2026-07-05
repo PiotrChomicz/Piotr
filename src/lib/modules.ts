@@ -63,7 +63,7 @@ export const modules: AppModule[] = [
     icon: "🎬",
     href: "/scripts",
     priority: "core",
-    available: false,
+    available: true,
   },
   {
     slug: "camera-breaker",
@@ -72,7 +72,7 @@ export const modules: AppModule[] = [
     icon: "🎥",
     href: "/scripts?mode=camera-breaker",
     priority: "core",
-    available: false,
+    available: true,
   },
   {
     slug: "tiktok-reels",
@@ -81,7 +81,7 @@ export const modules: AppModule[] = [
     icon: "📱",
     href: "/scripts?mode=tiktok",
     priority: "core",
-    available: false,
+    available: true,
   },
   {
     slug: "trendwords",
