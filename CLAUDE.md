@@ -16,13 +16,15 @@ zobacz Voice Influence Score → dostań kolejną misję → zobacz progres`
 Etap obecny: **MVP / klikalny prototyp** — bez bazy, bez płatności, bez
 prawdziwego API AI. Wszystkie odpowiedzi AI generowane z mock data.
 
-**Status modułów (po Etapach 2A/2B/2C):**
+**Status modułów (po Etapach 2A/2B/2C/2D):**
 
 - ✅ Etap 2A — `/vocabulary` (Powiedz to lepiej: 6 stylów, Słowo dnia,
   TrendWords Radar, ćwiczenie aktywnego użycia).
 - ✅ Etap 2B — `/scripts` (Camera Breaker + generator scenek, 7 kategorii,
   Maszyna Losująca).
 - ✅ Etap 2C — `/jokes` (Humor Coach, Stand-up light, anatomia żartu).
+- ✅ Etap 2D — `/dashboard` Daily Loop (trener dnia: jedno aktywne zadanie +
+  kaskada 6 kroków; instrukcje z przykładami; mock data).
 - ✅ Refactor: współdzielone `RandomMachine` i `Badge` w `src/components/`.
 - ✅ Przygotowanie architektoniczne pod bazę/subskrypcje (typy + plan + docs,
   **bez** wdrożenia) — patrz `docs/database-plan.md`.
@@ -167,8 +169,9 @@ planów w `src/lib/entitlements.ts`, plan w `docs/database-plan.md`), ale
    - 2B `/scripts` (Camera Breaker + scenki, 7 kategorii). ✅
    - 2C `/jokes` (Humor Coach + Stand-up light) + refactor `RandomMachine`/`Badge`
      + przygotowanie pod Supabase/subskrypcje. ✅
-   - 2D `/dashboard` Daily Loop — **następny**.
-   - 2E `/recording` odczytuje kontekst `scenario`/`joke` z URL.
+   - 2D `/dashboard` Daily Loop (trener dnia: jedno aktywne zadanie + kaskada
+     kroków, mock data). ✅
+   - 2E `/recording` odczytuje kontekst `scenario`/`joke` z URL — **następny**.
    - 2F Codex Review.
 3. **Etap 3 — UX polish**: animacje, stany pustki, mobilne polerowanie,
    on-boarding (wybór celu).

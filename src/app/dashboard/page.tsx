@@ -1,88 +1,102 @@
+"use client";
+
 import Link from "next/link";
-import { modules, trainingPaths } from "@/lib/modules";
-import { ScoreCard } from "@/components/ScoreCard";
-import { MissionCard } from "@/components/MissionCard";
-import { mockVoiceInfluenceScore } from "@/data/mockProgress";
-import { mockDailyMission, mockMissionStreak } from "@/data/mockDailyMissions";
+import { useState } from "react";
+import { DailyTaskCard } from "@/components/DailyTaskCard";
+import { DailyLoopStepper } from "@/components/DailyLoopStepper";
+import { ProgressSummary } from "@/components/ProgressSummary";
+import { PlanPreview } from "@/components/PlanPreview";
+import { FuturePreview } from "@/components/FuturePreview";
+import {
+  dailyLoopSteps,
+  dailyPlanMeta,
+  dailyProgress,
+  freePlanInfo,
+} from "@/data/mockDailyLoop";
 
 export default function DashboardPage() {
+  const total = dailyLoopSteps.length;
+  const nextStep = Math.min(dailyProgress.todayDone + 1, total);
+
+  const [activeIndex, setActiveIndex] = useState(nextStep);
+  const activeStep =
+    dailyLoopSteps.find((s) => s.index === activeIndex) ?? dailyLoopSteps[0];
+
+  const started = dailyProgress.todayDone > 0;
+  const finished = dailyProgress.todayDone >= total;
+  const primaryLabel = finished
+    ? "Powtórz trening"
+    : started
+      ? "Kontynuuj trening"
+      : "Zacznij dzisiejszy trening";
+
   return (
-    <div className="space-y-10">
-      <header>
-        <p className="text-sm uppercase tracking-wider text-muted">Dashboard</p>
-        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
-          Cześć! Co dziś trenujemy?
-        </h1>
-        <p className="mt-2 text-muted">
-          Wybierz ścieżkę albo wskocz w dzisiejszą misję.
+    <div className="space-y-8">
+      <section className="rounded-3xl border border-accent/40 bg-hero-gradient p-6 sm:p-8">
+        <p className="text-sm uppercase tracking-wider text-accent-soft">
+          Trener dnia
         </p>
-      </header>
+        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
+          {dailyPlanMeta.title}
+        </h1>
 
-      <div className="grid gap-5 lg:grid-cols-5">
-        <div className="lg:col-span-2">
-          <ScoreCard
-            score={mockVoiceInfluenceScore.current}
-            delta={mockVoiceInfluenceScore.delta}
-            level={mockVoiceInfluenceScore.level}
-          />
-        </div>
-        <div className="lg:col-span-3">
-          <MissionCard
-            mission={mockDailyMission}
-            streakDays={mockMissionStreak.streakDays}
-          />
-        </div>
-      </div>
-
-      <section>
-        <h2 className="mb-4 text-lg font-semibold">Ścieżki treningowe</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {trainingPaths.map((p) => (
-            <Link
-              key={p.slug}
-              href={`/recording?path=${p.slug}`}
-              className="rounded-2xl border border-border/60 bg-surface p-4 text-center transition hover:border-accent/60 hover:bg-surfaceElevated"
-            >
-              <div className="text-2xl">{p.icon}</div>
-              <div className="mt-2 text-sm">{p.label}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Wszystkie moduły</h2>
-          <span className="text-xs text-muted">
-            {modules.filter((m) => m.available).length} dostępne ·{" "}
-            {modules.filter((m) => !m.available).length} wkrótce
+        <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+          <span className="rounded-full border border-border px-2.5 py-0.5 text-muted">
+            ≈ {dailyPlanMeta.minutes} min
+          </span>
+          <span className="rounded-full border border-border px-2.5 py-0.5 text-muted">
+            {dailyPlanMeta.stepsCount} kroków
+          </span>
+          <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-accent-soft">
+            Plan: {dailyPlanMeta.planLabel}
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {modules.map((m) => (
-            <Link
-              key={m.slug}
-              href={m.href}
-              className="group flex flex-col rounded-2xl border border-border/60 bg-surface p-5 transition hover:border-accent/60 hover:bg-surfaceElevated"
-            >
-              <div className="flex items-start justify-between">
-                <div className="text-2xl">{m.icon}</div>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider ${
-                    m.available
-                      ? "bg-accent/20 text-accent-soft"
-                      : "border border-border text-muted"
-                  }`}
-                >
-                  {m.available ? "Dostępne" : "Wkrótce"}
-                </span>
-              </div>
-              <h3 className="mt-3 text-base font-medium">{m.title}</h3>
-              <p className="mt-1 text-sm text-muted">{m.description}</p>
-            </Link>
-          ))}
+
+        <div className="mt-4 rounded-2xl border border-border/60 bg-background/40 p-4">
+          <p className="text-xs uppercase tracking-wider text-accent-soft">
+            Cel na dziś
+          </p>
+          <p className="mt-1 text-sm">{dailyPlanMeta.goal}</p>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <button
+            onClick={() => setActiveIndex(nextStep)}
+            className="inline-flex items-center justify-center rounded-xl bg-accent-gradient px-6 py-3 text-sm font-medium text-white shadow-glow transition hover:opacity-90"
+          >
+            {primaryLabel}
+          </button>
+          <Link
+            href="/recording?path=daily-loop"
+            className="inline-flex items-center justify-center rounded-xl border border-border bg-surface/60 px-5 py-3 text-sm transition hover:bg-surfaceElevated"
+          >
+            🎙 Nagraj 30 sekund
+          </Link>
         </div>
       </section>
+
+      <DailyTaskCard step={activeStep} totalSteps={total} />
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        <div>
+          <h2 className="mb-3 text-lg font-semibold">Dzisiejsza ścieżka</h2>
+          <DailyLoopStepper
+            steps={dailyLoopSteps}
+            activeIndex={activeIndex}
+            doneCount={dailyProgress.todayDone}
+            onSelect={setActiveIndex}
+          />
+        </div>
+        <ProgressSummary progress={dailyProgress} />
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <PlanPreview
+          planLabel={freePlanInfo.planLabel}
+          perks={freePlanInfo.perks}
+        />
+        <FuturePreview />
+      </div>
     </div>
   );
 }

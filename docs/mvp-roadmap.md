@@ -49,10 +49,12 @@ transkrypcja i AI. Subskrypcja i B2B na końcu.
 
 ### Następne kroki
 
-- [ ] **Etap 2D — Dashboard Daily Loop**: dzisiejsza misja → ćwiczenie →
-  nagranie → feedback → progres, spięte w jeden loop na mock data.
-- [ ] **Etap 2E — `/recording` czyta kontekst z URL**: odczyt parametrów
-  `scenario` / `joke` / `path` i pokazanie ich w ekranie nagrywania.
+- [x] **Etap 2D — Dashboard Daily Loop**: `/dashboard` jako trener dnia —
+  model UX „jedno aktywne zadanie + kaskada 6 kroków", instrukcje z przykładami
+  (co/jak/przykład), mock progress + plan Free (informacyjnie). Mock data,
+  bez auth/Supabase/Stripe, bez nowych routes.
+- [ ] **Etap 2E — `/recording` czyta kontekst z URL** (następny): odczyt
+  parametrów `scenario` / `joke` / `path` i pokazanie ich w ekranie nagrywania.
 - [ ] **Etap 2F — Codex Review**: przegląd jakości, spójności i długu.
 
 ## Etap 3 — UX polish

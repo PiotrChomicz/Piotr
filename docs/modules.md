@@ -11,7 +11,7 @@ Konfiguracja techniczna w `src/lib/modules.ts`.
 | `/jokes` — Humor Coach + Stand-up light | ✅ dostępne (mock data) |
 | `/recording` — nagrywanie | ✅ dostępne, **audio-only** (MediaRecorder, bez wideo) |
 | `/feedback` — analiza nagrania | ✅ dostępne jako **mock** (9 obszarów) |
-| `/dashboard` — panel użytkownika | ✅ dostępne (Daily Loop w 2D) |
+| `/dashboard` — panel użytkownika | ✅ dostępne — **Daily Loop** (trener dnia: jedno aktywne zadanie + kaskada 6 kroków, mock data) |
 | `/admin` — panel admina | ⏳ później (przygotowany architektonicznie) |
 | `/account` — konto użytkownika | ⏳ później |
 | `/pricing` — plany subskrypcji | ⏳ później |

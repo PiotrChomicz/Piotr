@@ -136,6 +136,29 @@ export type ProgressLog = {
   streakDays: number;
 };
 
+// Dashboard Daily Loop — pojedynczy krok codziennego treningu.
+// Kazdy krok niesie co/jak/przyklad, zeby instrukcja nie byla pustym haslem.
+export type DailyLoopStep = {
+  index: number; // 1..N
+  title: string;
+  task: string; // CO zrobic
+  instruction: string; // JAK to zrobic
+  example: string; // PRZYKLAD
+  ctaLabel: string;
+  href: string;
+  icon: string;
+};
+
+export type DailyProgress = {
+  voiceInfluenceScore: number;
+  scoreMax: number;
+  streakDays: number;
+  todayDone: number;
+  todayTotal: number;
+  weekTrainings: number;
+  nextGoal: string; // konkretny, z przykladem — nie puste haslo
+};
+
 export type RephraseStyle =
   | "naturalny"
   | "biznesowy"
